@@ -1,6 +1,6 @@
 let flakeImg;
 let snowflakes = [];
-const NUM_SNOWFLAKES = 2000;
+const NUM_SNOWFLAKES = 1500;
 
 function preload() {
     flakeImg = loadImage('snowflake25.png');
@@ -26,28 +26,39 @@ function draw() {
 
 class Snowflake {
 
-    constructor() {
-        this.size = 12;
-        this.pos = createVector(random(0, width), random(-10000, -1000));
-        this.vel = createVector(random(-0.05, 0.05), .1);
-        this.acc = createVector(0, random(0.003, 0.005));
-        this.drag = 0.999;
-    }
+    // constructor() {
+    //     this.size = 25;
+    //     this.pos = createVector(random(0, width), random(0, 0));
+    //     this.vel = createVector(random(-0.5, 0.5), .1);
+    //     this.acc = createVector(this.vel.x/10, random(0.003, 0.005));
+    //     this.drag = 0.999;
+    // }
 
+    constructor() {
+        this.size = random(3, 8);
+        this.pos = createVector(random(0, width), random(-20000, -100));
+        this.startX = this.pos.x;
+        this.velY = random(0.1, 0.5);
+        this.accY = random(0.00001, 0.00002);
+        this.radius = random(40, 60);
+        this.rate = random(100, 400);
+    }
 
     update() {
 
-        this.vel = this.vel.add(this.acc);
-        this.vel = this.vel.mult(this.drag);
-        this.pos = this.pos.add(this.vel);
-
-        if (this.pos.y > height + this.size) {
-            this.pos.y = random(-1000, -this.size)
-        }
+        this.velY+=this.accY;
+        this.pos.x=this.startX + sin(frameCount/this.rate) * this.radius;
+        this.pos.y+=this.velY;
         
+        if(this.pos.y > height + this.size) {
+            this.pos.y = -20;
+        }
     }
 
     draw() {
         image(flakeImg, this.pos.x, this.pos.y, this.size, this.size);
+        textSize(20);
+        fill(255);
+         
     }
 }
